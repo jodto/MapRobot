@@ -1,3 +1,6 @@
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+
 import lejos.robotics.navigation.DifferentialPilot;
 import lejos.robotics.subsumption.Behavior;
 
@@ -6,9 +9,12 @@ public class ObjectDetectorBehave implements Behavior {
 	
 	
 	DifferentialPilot pilot;
-	public ObjectDetectorBehave(DifferentialPilot pilot){
+	DataInputStream dis;
+	DataOutputStream dos;
+	public ObjectDetectorBehave(DifferentialPilot pilot, DataInputStream dis,DataOutputStream dos){
 		this.pilot = pilot;
-		
+		this.dis = dis;
+		this.dos =dos;
 	}
 	@Override
 	public boolean takeControl() {
