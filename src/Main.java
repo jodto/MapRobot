@@ -8,15 +8,18 @@ import lejos.nxt.Motor;
 import lejos.nxt.comm.BTConnection;
 import lejos.nxt.comm.Bluetooth;
 import lejos.robotics.navigation.DifferentialPilot;
+import lejos.robotics.navigation.Navigator;
 import lejos.robotics.subsumption.Arbitrator;
 import lejos.robotics.subsumption.Behavior;
 
 public class Main {
 	private static DifferentialPilot pilot = new DifferentialPilot(
 		    DifferentialPilot.WHEEL_SIZE_NXT2, 14.0, Motor.B, Motor.C);
-	   
+	public static Navigator nav = new Navigator(pilot);
+	   		
 	public static void main(String[] args) {
 		
+			waitForKeyPressWithDelay(500);
 		 	LCD.clear();
 		    LCD.drawString("Waiting for client connection...", 0, 0);
 		    
@@ -27,12 +30,13 @@ public class Main {
 		    DataInputStream dis = new DataInputStream(btc.openDataInputStream());
 		    DataOutputStream dos = new DataOutputStream(btc.openDataOutputStream());
 		    
-		waitForKeyPressWithDelay(500);
+		
     	pilot.setTravelSpeed(500);
+    	pilot.forward();
     	System.out.println("Program Started");
-    	Behavior forward = new ForwardBehave(pilot);
+    	Behavior forward = new ForwardBehave(pilot, dis, dos, nav);
     	Behavior stop = new ExitBehave(pilot);
-    	Behavior detect = new ObjectDetectorBehave(pilot, dis, dos);
+    	Behavior detect = new ObjectDetectorBehave(pilot, dis, dos, nav);
     	Behavior[] behave = {forward, detect, stop};
     	
     	
